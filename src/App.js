@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import './App.css';
-import { generateRandomNumber } from './Modules/random';
-import Logs from './components/Logs';
-import Header from './components/Header';
-import Form from './components/Form';
+import { generateRandomNumber } from './Modules';
+import { Logs, Header, Form } from './components';
 
 const alertMessage = {
   needFourNumber: '4자리 숫자를 입력해주세요.',
