@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
-import { generateRandomNumber } from './random';
+import { generateRandomNumber } from './Modules/random';
+import Logs from './components/Logs';
 
 function App() {
   const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
   const [answer, setAnswer] = useState('');
   const [logs, setLogs] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  useEffect(() => {
-    console.log(randomNumber);
-  }, [randomNumber]);
 
   const handleAnswerChanged = (event) => {
     setAnswer(event.target.value);
@@ -66,7 +63,7 @@ function App() {
     }
     setLogs([...logs, `${answer} (strike: ${strike}, ball: ${ball})`]);
 
-    setAnswer("");
+    setAnswer('');
   };
 
   const handleRetry = () => {
@@ -99,12 +96,7 @@ function App() {
           )}
         </form>
       </section>
-      <h2>기록</h2>
-      <ol>
-        {logs.map((log, index) => {
-          return <li key={`${log}_${index}`}>{log}</li>;
-        })}
-      </ol>
+      <Logs logs={logs} />
     </div>
   );
 }
