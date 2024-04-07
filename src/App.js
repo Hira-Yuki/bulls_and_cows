@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import { generateRandomNumber } from './Modules/random';
 import Logs from './components/Logs';
+import Header from './components/Header';
+import Form from './components/Form';
 
 const alertMessage = {
   needFourNumber: '4자리 숫자를 입력해주세요.',
@@ -95,27 +97,14 @@ function App() {
 
   return (
     <div className="App">
-      <h1>숫자 야구 게임</h1>
-      <header className="header">
-        {isSuccess ? `정답: ${answer}` : '----'}
-      </header>
-      <section>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={answer}
-            onChange={handleAnswerChanged}
-            disabled={isSuccess}
-          />
-          {isSuccess ? (
-            <button type="button" onClick={handleRetry}>
-              다시하기
-            </button>
-          ) : (
-            <button type="submit">맞춰보기</button>
-          )}
-        </form>
-      </section>
+      <Header label={'숫자 야구 게임'} isSuccess={isSuccess} answer={answer} />
+      <Form
+        handleSubmit={handleSubmit}
+        answer={answer}
+        handleAnswerChanged={handleAnswerChanged}
+        isSuccess={isSuccess}
+        handleRetry={handleRetry}
+      />
       <Logs logs={logs} />
     </div>
   );
