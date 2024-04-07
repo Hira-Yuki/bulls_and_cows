@@ -3,27 +3,39 @@ import './App.css';
 import { generateRandomNumber } from './Modules/random';
 import Logs from './components/Logs';
 
+const alertMessage = {
+  needFourNumber: '4자리 숫자를 입력해주세요.',
+  requiredOnlyNumber: '숫자만 입력해 주세요.',
+  noDuplicated: '입력 값에 중복이 있어요.',
+};
+
 function App() {
-  const [randomNumber, setRandomNumber] = useState(generateRandomNumber());
-  const [answer, setAnswer] = useState('');
-  const [logs, setLogs] = useState([]);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [initialState, setInitialState] = useState({
+    randomNumber: generateRandomNumber(),
+    answer: '',
+    logs: [],
+    isSuccess: false,
+  });
+
+  const { randomNumber, answer, logs, isSuccess } = initialState;
 
   const handleAnswerChanged = (event) => {
-    setAnswer(event.target.value);
+    const newAnswer = event.target.value;
+    setInitialState({ ...initialState, answer: newAnswer });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const answers = answer.split('').map(Number);
+    const answers = initialState.answer.split('').map(Number);
 
     if (answers.some((number) => isNaN(number))) {
-      alert('숫자만 입력해주세요.');
+      alert(alertMessage.requiredOnlyNumber);
       return;
     }
 
     if (answers.length !== 4) {
-      alert('4자리 숫자만 입력해주세요.');
+      alert(alertMessage.needFourNumber);
+      setInitialState({ ...initialState, answer: '' });
       return;
     }
 
@@ -32,7 +44,7 @@ function App() {
     });
 
     if (isDuplicate) {
-      alert('입력 값에 중복이 있어요.');
+      alert(alertMessage.noDuplicated);
       return;
     }
 
@@ -57,20 +69,28 @@ function App() {
 
     if (strike === 4) {
       alert('정답입니다.');
-      setLogs([...logs, `${answer} (축하합니다. 정답입니다.)`]);
-      setIsSuccess(true);
+      setInitialState({
+        ...initialState,
+        logs: [...logs, `${answer} (축하합니다. 정답입니다.)`],
+        isSuccess: true,
+      });
       return;
     }
-    setLogs([...logs, `${answer} (strike: ${strike}, ball: ${ball})`]);
-
-    setAnswer('');
+    setInitialState({
+      ...initialState,
+      logs: [...logs, `${answer} (strike: ${strike}, ball: ${ball})`],
+      answer: '',
+    });
   };
 
   const handleRetry = () => {
-    setRandomNumber(generateRandomNumber());
-    setAnswer('');
-    setLogs([]);
-    setIsSuccess(false);
+    setInitialState({
+      ...initialState,
+      randomNumber: generateRandomNumber(),
+      answer: '',
+      logs: [],
+      isSuccess: false,
+    });
   };
 
   return (
